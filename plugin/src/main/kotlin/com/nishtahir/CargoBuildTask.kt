@@ -66,6 +66,30 @@ open class CargoBuildTask : DefaultTask() {
 
                 val theCommandLine = mutableListOf("cargo", "build");
 
+                if (cargoExtension.allFeatures) {
+                    if (cargoExtension.features != null) {
+                        throw GradleException("Cannot specify `allFeatures` with `features`!")
+                    }
+                    if (!cargoExtension.defaultFeatures) {
+                        throw GradleException("Cannot specify `allFeatures` with `defaultFeatures = false`!")
+                    }
+                    theCommandLine.add("--all-features")
+                }
+
+                if (!cargoExtension.defaultFeatures) {
+                    theCommandLine.add("--no-default-features")
+                }
+
+                cargoExtension.features?.let { features ->
+                    // We just pass this along to cargo as something space separated... AFAICT
+                    // you're allowed to have features with spaces in them, but I don't think
+                    // there's a way to specify them in the cargo command line -- rustc accepts
+                    // them if passed in directly with `--cfg`, and cargo will pass them to rustc
+                    // if you use them as default features.
+                    theCommandLine.add("--features")
+                    theCommandLine.add(features.joinToString(" "))
+                }
+
                 if (cargoExtension.profile != "debug") {
                     // Cargo is rigid: it accepts "--release" for release (and
                     // nothing for dev).  This is a cheap way of allowing only
@@ -86,6 +110,8 @@ open class CargoBuildTask : DefaultTask() {
                     var rustflags = "-C linker=$cc -C link-arg=-Wl,-soname,${cargoExtension.libname}.so"
                     environment("RUSTFLAGS", rustflags)
                 }
+
+                println("DEBUG -- ``${theCommandLine}``")
 
                 commandLine = theCommandLine
             }

@@ -55,4 +55,30 @@ open class CargoExtension {
     // and Kotlin that are just not worth working out.  Another JVM language, yet another dynamic
     // invoke solution :(
     var exec: ((ExecSpec, Toolchain) -> Unit)? = null
+
+    /**
+     * List of cargo features to use to build the library. These are passed as
+     * a space separated string to cargo with `--features`.
+     *
+     * It's an error to use this with `allFeatures = true`.
+     */
+    var features: Array<String>? = null
+
+    /**
+     * Whether or not the project's default features should be included.
+     * Defaults to true. Setting this to false is equivalent to passing
+     * `--no-default-features` to cargo build.
+     *
+     * It's an error to set this to `false` when using `allFeatures = true`.
+     */
+    var defaultFeatures: Boolean = true
+
+    /**
+     * Setting this to true is equivalent to passing `--all-features` to `cargo
+     * build`.
+     *
+     * It's an error to use this with a list of `features` or when
+    * `defaultFeatures = false`.
+     */
+    var allFeatures: Boolean = false
 }

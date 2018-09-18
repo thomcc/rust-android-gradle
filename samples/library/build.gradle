@@ -44,6 +44,9 @@ cargo {
     module = "../rust"
     targets = ["arm", "arm64", "x86"]
 
+    features = ["foo", "bar"]
+    defaultFeatures = false
+
     exec = { spec, toolchain ->
         spec.environment("TEST", "test")
     }
