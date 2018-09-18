@@ -46,6 +46,7 @@ cargo {
 
     features = ["foo", "bar"]
     defaultFeatures = false
+    verbose = true
 
     exec = { spec, toolchain ->
         spec.environment("TEST", "test")

@@ -66,6 +66,10 @@ open class CargoBuildTask : DefaultTask() {
 
                 val theCommandLine = mutableListOf("cargo", "build");
 
+                if (cargoExtension.verbose) {
+                    theCommandLine.add("--verbose")
+                }
+
                 if (cargoExtension.allFeatures) {
                     if (cargoExtension.features != null) {
                         throw GradleException("Cannot specify `allFeatures` with `features`!")

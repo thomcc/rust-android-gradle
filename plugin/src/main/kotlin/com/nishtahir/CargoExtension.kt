@@ -81,4 +81,9 @@ open class CargoExtension {
     * `defaultFeatures = false`.
      */
     var allFeatures: Boolean = false
+
+    /**
+     * Set to true to execute `cargo build` with the `--verbose` flag
+     */
+    var verbose: Boolean = false
 }
