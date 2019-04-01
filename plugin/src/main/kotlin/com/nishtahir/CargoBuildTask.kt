@@ -104,6 +104,15 @@ open class CargoBuildTask : DefaultTask() {
 
                 theCommandLine.add("--target=${toolchain.target}")
 
+
+                if (cargoExtension.locked) {
+                    theCommandLine.add("--locked")
+                }
+
+                if (cargoExtension.frozen) {
+                    theCommandLine.add("--frozen")
+                }
+
                 // Target-specific environment configuration, passed through to
                 // the underlying `cargo build` invocation.
                 val toolchain_target = toolchain.target.toUpperCase().replace('-', '_')
@@ -152,7 +161,6 @@ open class CargoBuildTask : DefaultTask() {
                     environment("RUST_ANDROID_GRADLE_CC", cc)
                     environment("RUST_ANDROID_GRADLE_CC_LINK_ARG", "-Wl,-soname,lib${cargoExtension.libname!!}.so")
                 }
-
                 commandLine = theCommandLine
             }
         }.assertNormalExitValue()
